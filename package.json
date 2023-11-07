@@ -1,0 +1,27 @@
+{
+  "name": "torrent-service",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "a torrent streaming service",
+  "main": "index.js",
+  "author": "hehehe",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --no-warnings src/server.js",
+    "start:watch": "node --no-warnings --watch src/server.js"
+  },
+  "dependencies": {
+    "archiver": "^6.0.1",
+    "body-parser": "^1.20.2",
+    "cluster": "^0.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-status-monitor": "^1.3.4",
+    "morgan": "^1.10.0",
+    "pm2": "^5.3.0",
+    "torrent-stream": "^1.2.1",
+    "webtorrent": "^2.1.27",
+    "zlib": "^1.0.5"
+  }
+}
