@@ -16,7 +16,7 @@ const App = () => {
     }
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_REMOTE_SERVER}/metadata`, {
+      const res = await axios.post(`${import.meta.env.VITE_REMOTE_SERVER.toString()}/metadata`, {
         magnetUri: magnet
       })
 
@@ -32,7 +32,7 @@ const App = () => {
       throw new Error("path not found");
     }
 
-    const endpoint = `${import.meta.env.VITE_REMOTE_SERVER}/stream?magnetUri=${magnet}&filePath=${path}`
+    const endpoint = `${import.meta.env.VITE_REMOTE_SERVER.toString()}/stream?magnetUri=${magnet}&filePath=${path}`
 
     const videoElement = document.createElement('video');
     videoElement.controls = true;
