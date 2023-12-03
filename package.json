@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "a torrent streaming service",
   "main": "index.js",
-  "author": "hehehe",
+  "author": "pawan kumar",
   "license": "MIT",
   "scripts": {
     "start": "node --no-warnings src/server.js",
@@ -12,15 +12,24 @@
   },
   "dependencies": {
     "archiver": "^6.0.1",
+    "axios": "^1.6.1",
     "body-parser": "^1.20.2",
     "cluster": "^0.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-status-monitor": "^1.3.4",
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.2",
     "morgan": "^1.10.0",
+    "mp4box": "^0.5.2",
+    "pg": "^8.11.3",
     "pm2": "^5.3.0",
+    "torrent-browse": "^1.0.2",
+    "torrent-project-api": "^1.0.4",
+    "torrent-search-api": "^2.1.4",
     "torrent-stream": "^1.2.1",
+    "uuid": "^9.0.1",
     "webtorrent": "^2.1.27",
     "zlib": "^1.0.5"
   }
