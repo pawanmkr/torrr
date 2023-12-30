@@ -15,4 +15,4 @@ app.use(statusMonitor());
 app.setMaxListeners(100);
 app.use('/', router);
 
-export default app
+export default app;

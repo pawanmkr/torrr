@@ -2,8 +2,9 @@ import path from 'path';
 import torrentStream from 'torrent-stream';
 import TorrentSearchApi from 'torrent-search-api'
 import crypto from 'node:crypto'
-import { Link } from './link.db.js';
+import { Queries } from '../database/queries.js';
 import queryString from 'node:querystring';
+import QRCode from 'qrcode';
 
 export async function getMetadata(req, res) {
   const { magnet } = req.query;
@@ -191,18 +192,19 @@ export async function searchTorrents(req, res) {
 
 export async function generateShortLink(req, res) {
   const { magnet } = req.query;
-
   if (magnet == undefined) {
     return res.sendStatus(400).send("Magnet URI not found");
   }
 
   const uid = crypto.randomUUID().substring(0, 8);
-  await Link.saveMagnet(uid, magnet);
+  await Queries.saveMagnet(uid, magnet);
 
   const shortLink = `${process.env.SERVER_URL}/short/` + uid;
+  const qrcode = await QRCode.toDataURL(shortLink);
 
   res.json({
     shortLink: shortLink,
+    qrCode: qrcode
   })
 }
 
@@ -214,7 +216,7 @@ export async function handleShortService(req, res) {
     })
   }
 
-  const magnet = await Link.retrieveMagnetUsingShortLink(uid);
+  const magnet = await Queries.retrieveMagnetUsingShortLink(uid);
   if (!magnet) {
     return res.sendStatus(404).json({
       error: "please use a valid link, this does not exist in our system"
@@ -234,7 +236,7 @@ export async function handleShortStats(req, res) {
     })
   }
 
-  const clicks = await Link.retrieveShortStats(uid);
+  const clicks = await Queries.retrieveShortStats(uid);
   if (!clicks || clicks < 0) {
     return res.sendStatus(404).json({
       error: "invalid short id, this does not exist in our system"
