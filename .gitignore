@@ -34,3 +34,5 @@ build/Release
 Thumbs.db
 duck.js
 /tmp
+
+yarn.lock

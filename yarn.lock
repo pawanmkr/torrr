@@ -455,9 +455,15 @@ axios@^0.21.0:
     follow-redirects "^1.14.0"
 
 axios@^1.6.1:
+<<<<<<< HEAD
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.3.tgz#7f50f23b3aa246eff43c54834272346c396613f4"
   integrity sha512-fWyNdeawGam70jXSVlKl+SUNVcL6j6W79CuSIPfi6HnDUmSCH6gyUys/HrqHeA/wU0Az41rRgean494d0Jb+ww==
+=======
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
+  integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
+>>>>>>> bef04894bcf17f005ebaac031fb00d740c959fa3
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -506,9 +512,15 @@ basic-auth@~2.0.1:
     safe-buffer "5.1.2"
 
 basic-ftp@^5.0.2:
+<<<<<<< HEAD
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/basic-ftp/-/basic-ftp-5.0.4.tgz#28aeab7bfbbde5f5d0159cd8bb3b8e633bbb091d"
   integrity sha512-8PzkB0arJFV4jJWSGOYR+OEic6aeKMu/osRhBULN6RY0ykby6LKhbmuQ5ublvaas5BOwboah5D87nrHyuh8PPA==
+=======
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/basic-ftp/-/basic-ftp-5.0.3.tgz#b14c0fe8111ce001ec913686434fe0c2fb461228"
+  integrity sha512-QHX8HLlncOLpy54mh+k/sWIFd0ThmRqwe9ZjELybGZK+tZ8rUb9VO0saKJUROTbE+KhzDUT7xziGpGrW8Kmd+g==
+>>>>>>> bef04894bcf17f005ebaac031fb00d740c959fa3
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
@@ -4998,9 +5010,15 @@ supports-preserve-symlinks-flag@^1.0.0:
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
 systeminformation@^5.7:
+<<<<<<< HEAD
   version "5.21.22"
   resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.21.22.tgz#9f0cb9955d564855d0992734212f3f2f03b29c6d"
   integrity sha512-gNHloAJSyS+sKWkwvmvozZ1eHrdVTEsynWMTY6lvLGBB70gflkBQFw8drXXr1oEXY84+Vr9tOOrN8xHZLJSycA==
+=======
+  version "5.21.20"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.21.20.tgz#16bd0d0c4118d00e670409a1f592ba7043159d2c"
+  integrity sha512-AyS1fNc+MDoAJtFknFbbo587H8h6yejJwM+H9rVusnOToIEkiMehMyD5JM7o3j55Cto20MawIZrcgNMgd4BfOQ==
+>>>>>>> bef04894bcf17f005ebaac031fb00d740c959fa3
 
 tar-stream@^3.0.0:
   version "3.1.6"
@@ -5547,9 +5565,15 @@ ws@^7.0.0:
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
 
 ws@^8.0.0, ws@^8.12.0:
+<<<<<<< HEAD
   version "8.16.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.16.0.tgz#d1cd774f36fbc07165066a60e40323eab6446fd4"
   integrity sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==
+=======
+  version "8.15.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.15.1.tgz#271ba33a45ca0cc477940f7f200cd7fba7ee1997"
+  integrity sha512-W5OZiCjXEmk0yZ66ZN82beM5Sz7l7coYxpRkzS+p9PP+ToQry8szKh+61eNktr7EA9DOwvFGhfC605jDHbP6QQ==
+>>>>>>> bef04894bcf17f005ebaac031fb00d740c959fa3
 
 ws@~7.4.0, ws@~7.4.2:
   version "7.4.6"
