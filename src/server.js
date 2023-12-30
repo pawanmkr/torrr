@@ -46,9 +46,9 @@ while (retryCount) {
     const client = await db.connect();
     if (client) {
       console.log("> Database Connected");
-      await Queries.createLinkTable();
-      await Queries.createChannelTable();
       await Queries.createUserTable();
+      await Queries.createChannelTable();
+      await Queries.createLinkTable();
 
       startServer();
     }

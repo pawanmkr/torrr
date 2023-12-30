@@ -14,12 +14,12 @@ if (JWT_SECRET_KEY === undefined) {
 }
 
 export async function registerNewUser(req, res) {
-  if (!req.body.name || !req.body.email || !req.body.password) {
+  if (!req.body.email || !req.body.password) {
     res.status(404).send("Fill all required fields");
     return;
   }
 
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   const hashedPassword = crypto
     .createHash("sha256")
     .update(password)
@@ -32,7 +32,6 @@ export async function registerNewUser(req, res) {
   }
 
   const registeredUser = await Queries.addNewUserToDB(
-    name,
     email,
     hashedPassword
   );
@@ -44,7 +43,6 @@ export async function registerNewUser(req, res) {
 
   const payload = {
     userId: registeredUser.id,
-    name: name,
     email: email,
   };
 
@@ -80,7 +78,6 @@ export async function login(req, res) {
 
   const payload = {
     userId: existingUser.id,
-    name: existingUser.name,
     email: existingUser.email,
   };
 
