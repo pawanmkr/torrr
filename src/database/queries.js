@@ -11,7 +11,7 @@ export class Queries {
           magnet TEXT NOT NULL,
           clicks INTEGER DEFAULT 0,
           created_at TIMESTAMP DEFAULT NOW(),
-          CONSTRAINTS fk_channel FOREIGN KEY (channel) REFERENCES channels (id) ON DELETE CASCADE
+          CONSTRAINT fk_channel FOREIGN KEY (channel) REFERENCES channels (id) ON DELETE CASCADE
         );
     `;
     try {
