@@ -1,7 +1,7 @@
-import express from "express";
-import morgan from "morgan";
+import express from 'express';
+import morgan from 'morgan';
 import statusMonitor from 'express-status-monitor';
-import router from "./route.js";
+import router from './route.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 

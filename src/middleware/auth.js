@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import process from 'process';
 import path from 'path';
 
 dotenv.config({
@@ -8,7 +9,7 @@ dotenv.config({
 
 const jwtSecret = process.env.JWT_SECRET_KEY || '';
 if (!jwtSecret) {
-  throw new Error("Unable to retrieve JWT Secret Key from env");
+  throw new Error('Unable to retrieve JWT Secret Key from env');
 }
 
 export default async function authorization(req, res, next) {
@@ -25,6 +26,6 @@ export default async function authorization(req, res, next) {
       next();
     });
   } else {
-    res.status(401).send("Authorization Token is Missing");
+    res.status(401).send('Authorization Token is Missing');
   }
 }

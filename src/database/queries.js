@@ -1,141 +1,91 @@
-import client from "./db.js";
+import db from './config.js';
+import { eq } from 'drizzle-orm';
+import { users, shortLinks, channels } from './schema.js';
 
-export class Queries {
-  static async createLinkTable() {
-    const query = `
-      CREATE TABLE 
-        IF NOT EXISTS short_links (
-          id SERIAL PRIMARY KEY,
-          uid TEXT NOT NULL UNIQUE,
-          channel INTEGER,
-          magnet TEXT NOT NULL,
-          clicks INTEGER DEFAULT 0,
-          created_at TIMESTAMP DEFAULT NOW(),
-          CONSTRAINT fk_channel FOREIGN KEY (channel) REFERENCES channels (id) ON DELETE CASCADE
-        );
-    `;
-    try {
-      await client.query(query);
-      console.log(`> Link Table Created`)
-    } catch (error) {
-      console.error("Error creating short_links table:", error);
-    }
-  }
+export default class Queries {
 
-  static async createChannelTable() {
-    const query = `
-      CREATE TABLE IF NOT EXISTS channels (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        owner INTEGER,
-        CONSTRAINT fk_owner FOREIGN KEY (owner) REFERENCES users (id) ON DELETE CASCADE
-      );
-    `;
-    try {
-      await client.query(query);
-      console.log(`> Channel Table Created`)
-    } catch (error) {
-      console.error("Error creating channel table:", error);
-    }
-  }
-
-  static async createUserTable() {
-    const query = `
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL
-      );
-    `;
-    try {
-      await client.query(query);
-      console.log(`> Users Table Created`)
-    } catch (error) {
-      console.error("Error creating Users table:", error);
-    }
-  }
-
+  // Check if email already exists
   static async doesEmailAlreadyExists(email) {
-    const existingEmail = await client.query(
-      `SELECT * FROM users WHERE email = $1`,
-      [email]
-    );
-    return existingEmail.rowCount > 0 ? true : false;
+    const existingEmail = await db(users)
+      .select()
+      .where(eq(users.email, email))
+      .count();
+
+    return existingEmail > 0;
   }
 
+  // Find user by email
   static async findUserWithEmail(email) {
-    const res = await client.query(
-      `SELECT * FROM users WHERE email = $1`,
-      [email]
-    );
-    return res.rows[0];
+    return await db(users)
+      .select()
+      .where(eq(users.email, email))
+      .first();
   }
 
-  static async addNewUserToDB(
-    email,
-    password
-  ) {
-    const user = await client.query(
-      `
-      INSERT INTO users (email, password) 
-        VALUES ($1, $2) RETURNING *
-      `,
-      [email, password]
-    );
-    return user ? user.rows[0] : null;
+  // Add new user
+  static async addNewUserToDB(email, password) {
+    return await db(users)
+      .insert({ email, password })
+      .returning('*')
+      .first();
   }
 
+  // Create new channel
   static async createNewChannel(name, owner) {
-    const res = await client.query(`
-      INSERT INTO channels (name, owner) 
-      VALUES ($1, $2) RETURNING *`,
-      [name, owner]
-    );
-    return res.rows[0];
-  };
+    return await db(channels)
+      .insert({ name, owner })
+      .returning('*')
+      .first();
+  }
 
+  // Save magnet
   static async saveMagnet(uid, magnet) {
-    const query = `INSERT INTO short_links (uid, magnet) VALUES($1, $2) RETURNING *`;
     try {
-      const res = await client.query(query, [uid, magnet]);
-      return res.rows[0];
+      return await db(shortLinks)
+        .insert({ uid, magnet })
+        .returning('*')
+        .first();
     } catch (error) {
-      console.error("Error saving magnet:", error);
+      console.error('Error saving magnet:', error);
+      return null;
     }
   }
 
+  // Retrieve magnet using short link
   static async retrieveMagnetUsingShortLink(uid) {
-    const query = `SELECT * FROM short_links WHERE uid=$1`;
     try {
-      const res = await client.query(query, [uid]);
-      if (res && res.rows.length > 0) {
-        if (res.rows[0].clicks >= 0) {
-          const clickResult = await client.query(
-            `UPDATE short_links SET clicks=clicks+1 WHERE uid=$1 RETURNING *`,
-            [res.rows[0].uid]
-          );
-          if (!clickResult) {
-            throw new Error("Something is wrong with clicks");
-          }
-        }
-        return res.rows[0].magnet;
-      } else {
-        return "";
+      const shortLink = await db(shortLinks)
+        .select()
+        .where(eq(shortLinks.uid, uid))
+        .first();
+
+      if (!shortLink) return '';
+
+      if (shortLink.clicks >= 0) {
+        await db(shortLinks)
+          .update({ clicks: shortLink.clicks + 1 })
+          .where(eq(shortLinks.uid, uid));
       }
+
+      return shortLink.magnet;
     } catch (error) {
-      console.error("Error retrieving magnet:", error);
+      console.error('Error retrieving magnet:', error);
+      return '';
     }
   }
 
+  // Retrieve short link stats
   static async retrieveShortStats(uid) {
     try {
-      const res = await client.query(
-        `SELECT clicks FROM short_links WHERE uid=$1`,
-        [uid]
-      );
-      return res.rows[0].clicks;
+      const res = await db(shortLinks)
+        .select(shortLinks.clicks)
+        .where(eq(shortLinks.uid, uid))
+        .first();
+
+      return res?.clicks || 0; // Handle case where record doesn't exist
     } catch (error) {
-      console.error("Error retrieving short stats:", error);
+      console.error('Error retrieving short stats:', error);
+      return 0;
     }
   }
 }

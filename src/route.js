@@ -1,6 +1,6 @@
-import express from "express";
-import { createNewChannel } from "./controller/channel.js";
-import authorization from "./middleware/auth.js";
+import express from 'express';
+import { createNewChannel } from './controller/channel.js';
+import authorization from './middleware/auth.js';
 import {
   generateShortLink,
   getMetadata,
@@ -8,13 +8,13 @@ import {
   searchTorrents,
   handleShortService,
   handleShortStats,
-} from "./controller/torrent.js";
-import { registerNewUser, login } from "./controller/user.js";
+} from './controller/torrent.js';
+import { registerNewUser, login } from './controller/user.js';
 
 const router = express.Router();
 
-router.get('/health', (res) => {
-  res.sendStatus(200)
+router.get('/health', (req, res) => {
+  res.sendStatus(200);
 });
 
 router.post('/user/register', registerNewUser);

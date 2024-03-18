@@ -1,4 +1,4 @@
-import { Queries } from "../database/queries.js";
+import Queries from '../database/queries.js';
 
 export async function createNewChannel(req, res) {
   const { name } = req.body;
@@ -7,7 +7,7 @@ export async function createNewChannel(req, res) {
   const existingUser = await Queries.doesEmailAlreadyExists(email);
   if (!existingUser) {
     return res.sendStatus(404).json({
-      message: "User does not exists in our system."
+      message: 'User does not exists in our system.'
     });
   }
 
