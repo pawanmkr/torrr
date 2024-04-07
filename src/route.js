@@ -1,6 +1,7 @@
 import express from 'express';
-import { createNewChannel } from './controller/channel.js';
 import authorization from './middleware/auth.js';
+import { createNewChannel } from './controller/channel.controller.js';
+import { registerNewUser, login } from './controller/user.controller.js';
 import {
   generateShortLink,
   getMetadata,
@@ -8,8 +9,7 @@ import {
   searchTorrents,
   handleShortService,
   handleShortStats,
-} from './controller/torrent.js';
-import { registerNewUser, login } from './controller/user.js';
+} from './controller/torrent.controller.js';
 
 const router = express.Router();
 
