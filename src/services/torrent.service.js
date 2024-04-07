@@ -65,25 +65,6 @@ export async function checkIfAudible(torrent) {
   });
 }
 
-/**
- * Searches for torrents using the specified provider and adds them to the given array.
- * @param {string} query - The search query.
- * @param {string} provider - The name of the torrent provider to search from.
- * @param {Array} trs - Array to store found torrents.
- */
-
-/**
- * if it says that the IP is blocked, then that means IP is blocked on any one provider
- * and fetch the data from other torrent providers
- * 
- * if the IP is blocked on every site, then it supposedly change the IP address and search the torrents using other IP address
- * 
- * if any error occured during the process, it will rotate or change the IP address and start fetching from that IP
- * 
- * case:
- * if one IP is blocked on a particular provider then it will search for the data using other providers and later rotate the IP 
- * address and search for the data using the provider on which the previous IP was blocked  
- */
 
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -98,40 +79,45 @@ function rotateProxy() {
   currentProxyIndex = (currentProxyIndex + 1) % proxies.length;
 }
 
+/**
+ * Searches for torrents using the specified provider and adds them to the given array.
+ * @param {string} query - The search query.
+ * @param {string} provider - The name of the torrent provider to search from.
+ * @param {Array} trs - Array to store found torrents.
+ */
 export async function searchForTorrents(query, provider, trs) {
   try {
-    const proxy = proxies[currentProxyIndex]
+    const proxy = proxies[currentProxyIndex];
     // TorrentSearchApi.enableProvider(provider, { ipAddress: proxy.ip, port: proxy.port });
     TorrentSearchApi.enableProvider(provider, proxy);
+    /**
+     * if it says that the IP is blocked, then that means IP is blocked on any one provider
+     * and fetch the data from other torrent providers
+     * 
+     * if the IP is blocked on every site, then it supposedly change the IP address and search the torrents using other IP address
+     * 
+     * if any error occured during the process, it will rotate or change the IP address and start fetching from that IP
+     * 
+     * case:
+     * if one IP is blocked on a particular provider then it will search for the data using other providers and later rotate the IP 
+     * address and search for the data using the provider on which the previous IP was blocked  
+     */
 
     if (trs.length < 3) {
-      const torrents = await TorrentSearchApi.search(query, '', 3);
-      // console.log(torrents);
+      const torrents = await TorrentSearchApi.search(query, '', 5);
       torrents.forEach((torrent) => {
         if ('magnet' in torrent)
           if (torrent.numFiles !== 0 && torrent.id !== 0) {
-            // torrent['provider'] = 'public providers';
             torrent['provider'] = provider;
-            // trs.push(
-            //   {
-            //     ip: proxy.ip,
-            //     port: proxy.port,
-            //     provider: provider,
-            //     link: torrent.magnet
-            //   }
-            // )
             trs.push(torrent);
           }
       });
     }
-    // console.log(`Found torrents using proxy IP: ${proxy.ip}:${proxy.port} on provider ${provider}`);
-    // console.log(`Torrents found:`, trs);
   } catch (error) {
-    console.error(`Error searching torrents from ${provider}. IP ${proxies[currentProxyIndex].ip} may be blocked`,)
-
+    console.error(`Error searching torrents from ${provider}. IP ${proxies[currentProxyIndex].ip} may be blocked`);
     rotateProxy();
     // move to next proxy if error
-    await searchForTorrents(query, provider, trs)
+    await searchForTorrents(query, provider, trs);
   } finally {
     TorrentSearchApi.disableProvider(provider);
   }

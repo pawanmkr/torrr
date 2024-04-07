@@ -7,8 +7,8 @@ import QRCode from 'qrcode';
 import process from 'process';
 import ffmpeg from 'fluent-ffmpeg';
 import Queries from '../database/queries.js';
-import { checkIfAudible, searchForTorrents } from '../services/torrent.js';
-import { downloadFromGoogleDrive } from '../services/gdrive.js';
+import { checkIfAudible, searchForTorrents } from '../services/torrent.service.js';
+import { downloadFromGoogleDrive } from '../services/gdrive.service.js';
 
 
 /**
@@ -38,28 +38,6 @@ export async function getMetadata(req, res) {
     const engine = createTorrentEngine(magnet);
 
     engine.on('ready', function () {
-
-
-      // Iterate through files in torrent
-      /* engine.files.forEach(function (file) {
-        // Supported file extensions
-        const extensions = [
-          '.3gp', '.avi', '.flv', '.h264', '.m4v',
-          '.mkv', '.mov', '.mp4', '.mpg', '.mpeg',
-        ];
-
-        // Check if file extension is supported
-        extensions.forEach((ext) => {
-          if (file.name.includes(ext)) {
-            files.push({
-              name: file.name,
-              path: file.path,
-              size: `${Math.round(file.length / 1000000)} mb`,
-            });
-          }
-        });
-      }); */
-
       // Efficient file type filtering
       const supportedExtensions = new Set([
         '.3gp', '.avi', '.flv', '.h264', '.m4v',
