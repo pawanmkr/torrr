@@ -1,7 +1,7 @@
 import Queries from '../database/queries.js';
 
 export async function createNewChannel(req, res) {
-  const { name } = req.body;
+  const { name, phoneNumber } = req.body;
   const { email } = req.user;
 
   const existingUser = await Queries.doesEmailAlreadyExists(email);
@@ -16,7 +16,7 @@ export async function createNewChannel(req, res) {
     return res.send(500);
   }
 
-  const channel = await Queries.createNewChannel(name, owner);
+  const channel = await Queries.createNewChannel(name, owner, phoneNumber);
 
   res.sendStatus(201).json({
     id: channel.id,

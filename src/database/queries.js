@@ -1,6 +1,10 @@
-import db from './config.js';
+// import db from './config.js';
 import { eq } from 'drizzle-orm';
 import { users, shortLinks, channels } from './schema.js';
+
+import { getDbInstance } from './config.js';
+
+const db = getDbInstance();
 
 export default class Queries {
 
@@ -16,10 +20,15 @@ export default class Queries {
 
   // Find user by email
   static async findUserWithEmail(email) {
-    return await db(users)
-      .select()
-      .where(eq(users.email, email))
-      .first();
+    try {
+      const user = await db(users)
+        .select()
+        .where(eq(users.email, email))
+        .first();
+      return user;
+    } catch (error) {
+      console.error('Error finding user with email:', error);
+    }
   }
 
   // Add new user
@@ -31,9 +40,9 @@ export default class Queries {
   }
 
   // Create new channel
-  static async createNewChannel(name, owner) {
+  static async createNewChannel(name, owner, phoneNumber) {
     return await db(channels)
-      .insert({ name, owner })
+      .insert({ name, owner, phoneNumber })
       .returning('*')
       .first();
   }

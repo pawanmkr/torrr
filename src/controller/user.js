@@ -10,6 +10,7 @@ dotenv.config({
 });
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 if (JWT_SECRET_KEY === undefined) {
   throw new Error('JWT_SECRET NOT FOUND');
 }
@@ -55,36 +56,41 @@ export async function registerNewUser(req, res) {
 }
 
 export async function login(req, res) {
-  if (!req.body.email || !req.body.password) {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
     res.status(404).send('Fill all required fields');
     return;
   }
 
-  const { email, password } = req.body;
-  const hashedPassword = crypto
-    .createHash('sha256')
-    .update(password)
-    .digest('hex');
+  try {
+    const hashedPassword = crypto
+      .createHash('sha256')
+      .update(password)
+      .digest('hex');
 
-  const existingUser = await Queries.findUserWithEmail(email);
-  if (!existingUser) {
-    res.status(404).send('User does not exists');
-    return;
+    const existingUser = await Queries.findUserWithEmail(email);
+    if (!existingUser) {
+      res.status(404).send('User does not exists');
+      return;
+    }
+
+    if (existingUser.password !== hashedPassword) {
+      res.status(404).send('email or passowrd is incorrect');
+      return;
+    }
+
+    const payload = {
+      userId: existingUser.id,
+      email: existingUser.email,
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET_KEY);
+
+    res.status(201).json({
+      token: token,
+    });
+  } catch (error) {
+    console.log(error);
   }
-
-  if (existingUser.password !== hashedPassword) {
-    res.status(404).send('email or passowrd is incorrect');
-    return;
-  }
-
-  const payload = {
-    userId: existingUser.id,
-    email: existingUser.email,
-  };
-
-  const token = jwt.sign(payload, JWT_SECRET_KEY);
-
-  res.status(201).json({
-    token: token,
-  });
 }

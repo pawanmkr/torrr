@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import process from 'process';
+// import process from 'process';
+import pkg from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 
 dotenv.config({
   path: path.join(process.cwd(), '.env'),
@@ -20,9 +23,9 @@ dotenv.config({
 // }
 
 
-import pkg from 'pg';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
+// import pkg from 'pg';
+// import { drizzle } from 'drizzle-orm/node-postgres';
+// import { migrate } from 'drizzle-orm/node-postgres/migrator';
 //import { sql } from 'drizzle-orm';
 
 const pool = new pkg.Pool({
@@ -30,6 +33,10 @@ const pool = new pkg.Pool({
 });
 
 const db = drizzle(pool);
+
+export function getDbInstance() {
+  return db;
+}
 
 export async function connectWithDB() {
   try {
@@ -41,10 +48,12 @@ export async function connectWithDB() {
     await migrate(db, { migrationsFolder: './migrations' });
     console.log('> Migrations Complete.\n');
 
-    await pool.end();
+    // await pool.end();
   } catch (error) {
     console.log('[database]: failed to connect with db, ' + error);
     throw error;
+  } finally {
+    await pool.end()
   }
 }
 
