@@ -11,13 +11,14 @@ const App = () => {
   }
 
   const fetchMetadata = async () => {
+    console.log('enter');
     if (magnet == "") {
       throw new Error("no magnet url found")
     }
 
+    console.log(import.meta.env.VITE_REMOTE_SERVER);
     try {
       const res = await axios.get(`${import.meta.env.VITE_REMOTE_SERVER.toString()}/metadata?magnet=${magnet}`)
-
       setVideos(res.data)
     } catch (error) {
       console.error('Error fetching video:', error);
@@ -46,17 +47,17 @@ const App = () => {
   };
 
   return (
-    <div key={1234} style={{ textAlign: 'center', marginTop: '20px' }} className='container'>
-      <input type="text" placeholder='Please enter the magnet URI here' onChange={handleMagnet} />
-      <button onClick={fetchMetadata} >Fetch Video</button>
+    <div key={ 1234 } style={ { textAlign: 'center', marginTop: '20px' } } className='container'>
+      <input type="text" placeholder='Please enter the magnet URI here' onChange={ handleMagnet } />
+      <button onClick={ fetchMetadata } >Fetch Video</button>
 
       <div id="video-container"></div>
-      <h1>Total Videos: {videos.length}</h1>
-      {videos.map((v) => {
+      <h1>Total Videos: { videos.length }</h1>
+      { videos.map((v) => {
         return <>
-          <p key={Math.random()} onClick={streamVideo} id={v.path} >{v.name} - {v.size} MB</p>
+          <p key={ Math.random() } onClick={ streamVideo } id={ v.path } >{ v.name } - { v.size } MB</p>
         </>
-      })}
+      }) }
     </div>
   );
 };

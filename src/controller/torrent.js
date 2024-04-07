@@ -253,8 +253,9 @@ export async function searchTorrents(req, res) {
   );
 
   await Promise.all(promises1);
+  // console.log(trs);
 
-  let audibleTorrents;
+  let audibleTorrents = [];
   if (audio == 'true') {
     const magnetLinks = new Set();
 
@@ -274,9 +275,9 @@ export async function searchTorrents(req, res) {
 
   // Return search results
   return res.json({
-    found: finalTorrents.length > 0,
-    length: finalTorrents.length,
-    result: finalTorrents,
+    found: finalTorrents.length > 0 || trs.length > 0,
+    length: finalTorrents.length || trs.length,
+    result: finalTorrents.length > 0 ? finalTorrents : trs,
   });
 }
 

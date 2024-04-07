@@ -20,9 +20,11 @@ router.get('/health', (req, res) => {
 router.post('/user/register', registerNewUser);
 router.post('/user/login', login);
 
+// 
 router.get('/metadata', getMetadata);
 router.get('/stream', handleStreaming);
 router.get('/search', searchTorrents);
+// 
 
 router.get('/generate/short', generateShortLink);
 router.get('/short/:uid', handleShortService);

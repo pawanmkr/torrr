@@ -14,6 +14,7 @@ export const channels = pgTable('channels', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   owner: integer('owner').references(() => users.id, { onDelete: 'CASCADE' }),
+  phoneNumber: varchar('phone_number', { length: 10 || 12 }).notNull(),
   createdAt: timestamp('created_at', { mode: 'string' }).default(sql`NOW()`),
   updatedAt: timestamp('updated_at', { mode: 'string' }).notNull()
 });
